@@ -12,7 +12,7 @@ import database.*;
  *
  * @author Axioo
  */
-public class Customer extends javax.swing.JFrame {
+public class MainInterface extends javax.swing.JFrame {
 
     /**
      * Creates new form Customer
@@ -27,22 +27,28 @@ public class Customer extends javax.swing.JFrame {
     
     private Menu selectedMenu; //Current selected menu
     private long totalPrice;
+    private long userPayment;
+    private int orderID;
     
-    public Customer() {
+    public MainInterface() {
         initComponents();
         createMenu();
+        
+        //Randomize orderID (antara 1 - 10000)
+        orderID = new Random().nextInt(10000) + 1;
+        tfNoTransaksi.setText(Integer.toString(orderID));
     }
     
     private void createMenu(){
         food = db.getMenuDetail("food");
         drink = db.getMenuDetail("drink");        
         //Change menu button text
-        btMakanan1.setText(food.get(0).getName());
-        btMakanan2.setText(food.get(1).getName());
-        btMakanan3.setText(food.get(2).getName());
-        btMinuman1.setText(drink.get(0).getName());
-        btMinuman2.setText(drink.get(1).getName());
-        btMinuman3.setText(drink.get(2).getName());
+        btMakanan1.setText(food.get(0).getMenuName());
+        btMakanan2.setText(food.get(1).getMenuName());
+        btMakanan3.setText(food.get(2).getMenuName());
+        btMinuman1.setText(drink.get(0).getMenuName());
+        btMinuman2.setText(drink.get(1).getMenuName());
+        btMinuman3.setText(drink.get(2).getMenuName());
     }
     private void setMenuDetail(String type, int index){ 
         if(type.equals("food")){
@@ -51,7 +57,7 @@ public class Customer extends javax.swing.JFrame {
         if(type.equals("drink")){
             selectedMenu = drink.get(index);
         }
-        lbNamaMenu.setText(selectedMenu.getName());
+        lbNamaMenu.setText(selectedMenu.getMenuName());
         tfHargaProdukSatuan.setText("Rp. " + Integer.toString(selectedMenu.getPrice()));
         spPorsiProduk.setValue(0);
         tfHargaProdukTotal.setText("Rp. 0"); 
@@ -59,10 +65,15 @@ public class Customer extends javax.swing.JFrame {
         //Debug
         System.out.println(selectedMenu.toString());
     }
-    private void addMenuOrder(){
-        order.add(selectedMenu);
-    }
-    private void updateTotalPrice(){
+    private void addMenuOrder(String type){
+        if(type.equals("food")){
+            foodOrder.add(selectedMenu);
+        }
+        if(type.equals("drink")){
+            drinkOrder.add(selectedMenu);
+        }
+        
+        // Updating totalPrice
         tfTotalBiaya.setText(Long.toString(totalPrice));
         tfTotalBiaya1.setText(Long.toString(totalPrice));
     }
@@ -124,11 +135,11 @@ public class Customer extends javax.swing.JFrame {
         Status = new javax.swing.JPanel();
         lbPembayaran1 = new javax.swing.JLabel();
         lbMasukanNoTransaksi = new javax.swing.JLabel();
-        tfInputTransaksi = new javax.swing.JTextField();
+        tfInputNoTransaksi = new javax.swing.JTextField();
         lbStatusPesanan = new javax.swing.JLabel();
         btKembaliStatus = new javax.swing.JButton();
-        ScrollStatus = new javax.swing.JScrollPane();
-        HasilStatus = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        btCariNoTransaksi = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -522,7 +533,7 @@ public class Customer extends javax.swing.JFrame {
                             .addGroup(TransaksiLayout.createSequentialGroup()
                                 .addGap(287, 287, 287)
                                 .addComponent(lbStatusPembayaran)))))
-                .addContainerGap(65, Short.MAX_VALUE))
+                .addContainerGap(74, Short.MAX_VALUE))
         );
         TransaksiLayout.setVerticalGroup(
             TransaksiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -570,18 +581,26 @@ public class Customer extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout HasilStatusLayout = new javax.swing.GroupLayout(HasilStatus);
-        HasilStatus.setLayout(HasilStatusLayout);
-        HasilStatusLayout.setHorizontalGroup(
-            HasilStatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 726, Short.MAX_VALUE)
+        jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jPanel1.setToolTipText("");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 750, Short.MAX_VALUE)
         );
-        HasilStatusLayout.setVerticalGroup(
-            HasilStatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 427, Short.MAX_VALUE)
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 252, Short.MAX_VALUE)
         );
 
-        ScrollStatus.setViewportView(HasilStatus);
+        btCariNoTransaksi.setText("Search");
+        btCariNoTransaksi.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btCariNoTransaksiMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout StatusLayout = new javax.swing.GroupLayout(Status);
         Status.setLayout(StatusLayout);
@@ -597,16 +616,22 @@ public class Customer extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(lbMasukanNoTransaksi)
                         .addGap(18, 18, 18)
-                        .addComponent(tfInputTransaksi, javax.swing.GroupLayout.PREFERRED_SIZE, 579, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(tfInputNoTransaksi, javax.swing.GroupLayout.PREFERRED_SIZE, 579, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(StatusLayout.createSequentialGroup()
                         .addGap(262, 262, 262)
-                        .addComponent(btKembaliStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(StatusLayout.createSequentialGroup()
-                        .addGap(330, 330, 330)
-                        .addComponent(lbStatusPesanan))
-                    .addGroup(StatusLayout.createSequentialGroup()
-                        .addGap(37, 37, 37)
-                        .addComponent(ScrollStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 728, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btKembaliStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(23, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, StatusLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(StatusLayout.createSequentialGroup()
+                .addGap(332, 332, 332)
+                .addComponent(lbStatusPesanan)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(StatusLayout.createSequentialGroup()
+                .addGap(350, 350, 350)
+                .addComponent(btCariNoTransaksi)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         StatusLayout.setVerticalGroup(
@@ -617,12 +642,14 @@ public class Customer extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(StatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbMasukanNoTransaksi)
-                    .addComponent(tfInputTransaksi, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tfInputNoTransaksi, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btCariNoTransaksi)
+                .addGap(15, 15, 15)
                 .addComponent(lbStatusPesanan)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(ScrollStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20)
+                .addGap(35, 35, 35)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(btKembaliStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(23, 23, 23))
         );
@@ -706,16 +733,17 @@ public class Customer extends javax.swing.JFrame {
     }//GEN-LAST:event_btMakanan1MouseClicked
 
     private void spPorsiProdukStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spPorsiProdukStateChanged
-        int value = (int)spPorsiProduk.getValue();
-        if (value < 0){
+        int quantity = (int)spPorsiProduk.getValue();
+        if (quantity < 0){
             spPorsiProduk.setValue(0);
-            value = 0;
+            quantity = 0;
         }
         if(tfHargaProdukSatuan.getText().equals("-- Silahkan Pilih Menu --")){
             return;
         }
         int satuan = Integer.parseInt(tfHargaProdukSatuan.getText().substring(4));
-        tfHargaProdukTotal.setText("Rp. " + (satuan * value));   
+        tfHargaProdukTotal.setText("Rp. " + (satuan * quantity));
+        selectedMenu.setQuantity(quantity);
     }//GEN-LAST:event_spPorsiProdukStateChanged
 
     private void btTambahMenuMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btTambahMenuMousePressed
@@ -727,7 +755,7 @@ public class Customer extends javax.swing.JFrame {
         tfHargaProdukTotal.setText("-- Silahkan Pilih Menu --");
         tfHargaProdukSatuan.setText("-- Silahkan Pilih Menu --");
         spPorsiProduk.setValue(0);
-        updateTotalPrice();
+        addMenuOrder(selectedMenu.getType());    
     }//GEN-LAST:event_btTambahMenuMousePressed
 
     private void btMinuman1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btMinuman1MouseClicked
@@ -743,7 +771,25 @@ public class Customer extends javax.swing.JFrame {
     }//GEN-LAST:event_btMinuman3MouseClicked
 
     private void btBayarMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btBayarMousePressed
-        // TODO add your handling code here:
+        userPayment = Long.parseLong(tfInputUang.getText());
+//        if (userPayment < totalPrice) {
+//            // TODO jika input uang kurang
+//            return;
+//        }
+        long change = userPayment - totalPrice;
+        tfTotalKembalian.setText("Rp. " + change);
+        
+        // Menambah daftar pesanan baru ke DB
+        // DB untuk tabel `orders`
+        db.createOrder(orderID, totalPrice);
+        // Untuk tabel `food_order`
+        if (!foodOrder.isEmpty()){
+            db.createMenuOrder("food", orderID, foodOrder);
+        }
+        // Untuk tabel `drink_order`
+        if (!drinkOrder.isEmpty()){
+            db.createMenuOrder("drink", orderID, drinkOrder);
+        }
     }//GEN-LAST:event_btBayarMousePressed
 
     private void tfInputUangFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfInputUangFocusGained
@@ -757,6 +803,11 @@ public class Customer extends javax.swing.JFrame {
         Status.setVisible(false);
         totalPrice = 0;
     }//GEN-LAST:event_formComponentShown
+
+    private void btCariNoTransaksiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btCariNoTransaksiMouseClicked
+        int searchID = Integer.parseInt(tfInputNoTransaksi.getText());
+        db.searchOrder(searchID);
+    }//GEN-LAST:event_btCariNoTransaksiMouseClicked
 
     /**
      * @param args the command line arguments
@@ -775,17 +826,18 @@ public class Customer extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Customer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Customer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Customer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Customer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainInterface.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
 
-        Customer frame = new Customer();
+        MainInterface frame = new MainInterface();
         
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -798,18 +850,17 @@ public class Customer extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel HasilStatus;
     private javax.swing.JPanel Home;
     private javax.swing.JPanel Menu;
     private javax.swing.JPanel MenuMakanan;
     private javax.swing.JPanel MenuMinuman;
     private javax.swing.JScrollPane ScrollPanelMakanan;
     private javax.swing.JScrollPane ScrollPanelMinuman;
-    private javax.swing.JScrollPane ScrollStatus;
     private javax.swing.JPanel Status;
     private javax.swing.JTabbedPane TabMenu;
     private javax.swing.JPanel Transaksi;
     private javax.swing.JButton btBayar;
+    private javax.swing.JButton btCariNoTransaksi;
     private javax.swing.JButton btCekStatus;
     private javax.swing.JButton btKembaliMenu;
     private javax.swing.JButton btKembaliStatus;
@@ -823,6 +874,7 @@ public class Customer extends javax.swing.JFrame {
     private javax.swing.JButton btMinuman3;
     private javax.swing.JButton btPesan;
     private javax.swing.JButton btTambahMenu;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lbBanyakPorsi;
     private javax.swing.JLabel lbDaftarMenu;
     private javax.swing.JLabel lbHargaProdukSatuan;
@@ -842,7 +894,7 @@ public class Customer extends javax.swing.JFrame {
     private javax.swing.JSpinner spPorsiProduk;
     private javax.swing.JTextField tfHargaProdukSatuan;
     private javax.swing.JTextField tfHargaProdukTotal;
-    private javax.swing.JTextField tfInputTransaksi;
+    private javax.swing.JTextField tfInputNoTransaksi;
     private javax.swing.JTextField tfInputUang;
     private javax.swing.JTextField tfNoTransaksi;
     private javax.swing.JTextField tfTotalBiaya;

@@ -9,24 +9,16 @@ package database;
  *
  * @author Axioo
  */
-public class Menu {
+public class Menu extends Order{
     private int id;
-    private String nama;
     private int harga;
     private String type;
     
-    Menu(String nama){
-        this.nama = nama;
-        this.harga = 0;
-    }
-    Menu(int id, String nama, int harga, String type){
+    public Menu(int id, String nama, int harga, String type){
+        super(nama);
         this.id = id;
-        this.nama = nama;
         this.harga = harga;
         this.type = type;
-    }
-    public String getName(){
-        return nama;
     }
     public int getPrice(){
         return harga;
@@ -37,8 +29,9 @@ public class Menu {
     public String getType(){
         return type;
     }
+    
     @Override
     public String toString(){
-        return id + " " + nama + " " + harga + " " + type;
+        return getId() + " " + getMenuName() + " " + getPrice() + " " + getType();
     }
 }
