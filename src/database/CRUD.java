@@ -51,11 +51,13 @@ public class CRUD extends Connector{
     }
     
     // Menginput data pada table 'food_orders' atau 'drink_orders'
+    // Dalam list
     public void createMenuOrder(String menuType, int orderID, ArrayList<Menu> orders){
         String tableName = menuType.equals("food") ? "food_orders" : "drink_orders";
         for (Menu order : orders){
             query = "INSERT INTO `" + tableName + "` "
-                    + "VALUES (NULL, '" + orderID + "', '" + order.getId() + "', '"+ order.getQuantity() +"')";
+                    + "VALUES (NULL, '" + orderID + "', '" + order.getId() 
+                    + "', '"+ order.getQuantity() +"')";
             try{
                 st.execute(query);
             }catch(SQLException e){
@@ -64,16 +66,31 @@ public class CRUD extends Connector{
             
         }
     }
-    
-    public void searchOrder(int orderID){
-        ArrayList<Order> orders = new ArrayList<>();
-        orders.addAll(getMenuOrder("food", orderID));
-        orders.addAll(getMenuOrder("drink", orderID));
-        for(Order order : orders){
-            System.out.println(order.getMenuName() + " " + order.getQuantity());
+    // Dalam satuan
+    public void createMenuOrder(String menuType, int orderID, Menu order){
+        String tableName = menuType.equals("food") ? "food_orders" : "drink_orders";
+        query = "INSERT INTO `" + tableName + "` "
+                + "VALUES (NULL, '" + orderID + "', '" + order.getId() 
+                + "', '"+ order.getQuantity() +"')";
+        try{
+            st.execute(query);
+        }catch(SQLException e){
+            e.printStackTrace();
         }
     }
     
+    // Mencari daftar pesanan menu makanan dan minuman, dengan input
+    // No Transaksi sebagai key
+    public ArrayList<Order> searchOrder(int orderID){
+        ArrayList<Order> orders = new ArrayList<>();
+        orders.addAll(getMenuOrder("food", orderID));
+        orders.addAll(getMenuOrder("drink", orderID));
+        return orders;
+    }
+    
+    // Fungsi utama dari pencarian no transaksi, mereturn satu jenis menu
+    // Dapat berupa makanan atau minuman untuk digabungkan dengan ArrayList
+    // Pesanan secara keseluruhan
     private ArrayList<Order> getMenuOrder(String menuType, int key){
         ArrayList<Order> result = new ArrayList<>();
         
@@ -90,7 +107,9 @@ public class CRUD extends Connector{
             rs = st.executeQuery(query);
             while(rs.next()){
                 result.add(new Order(
+                        // Nama menu
                         rs.getString(1),
+                        // Quantity pesanan
                         Integer.parseInt(rs.getString(2))));
                 }
         }catch(SQLException e){

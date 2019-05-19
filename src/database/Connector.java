@@ -6,10 +6,12 @@
 package database;
 
 import java.sql.*;
+import javax.swing.*;
 
 public class Connector {
 
     final private String DRIVER = "com.mysql.jdbc.Driver";
+    // Silahkan ganti variabel dibawah ini sesuai settingan database anda
     final private String URL = "jdbc:mysql://localhost:3306/";
     final private String DB = "restaurant";
     final private String USER = "root";
@@ -25,11 +27,12 @@ public class Connector {
             Class.forName(DRIVER);
             con = DriverManager.getConnection(URL, USER, PASS);
             st = con.createStatement();
-            creatingDatabase();
-            System.out.println("Database Connected");
+            st.execute("USE " + DB);
+            JOptionPane.showMessageDialog(null, "Database Connected");
         }catch(Exception e){
-            System.err.println("Database Failed to Connect");
+            JOptionPane.showMessageDialog(null, "Database Failed to Connect, Exiting Now");
             e.printStackTrace();
+            System.exit(0);
         }
     }
     
@@ -43,9 +46,10 @@ public class Connector {
             System.out.println("Database " + DB + " is ready");
         }catch(SQLException e){
             System.out.println("Database " + DB + " doesn't exist, creating now");
-            query = "CREATE DATABASE " + DB;
+            query = "CREATE DATABASE " + DB + " "
+                    + " USE " + DB;
             try{
-                st.execute(query);
+                st.executeLargeUpdate(query);
                 System.out.println("Database " + DB + " created successfuly");
             }catch(SQLException er){
                 System.err.println("Failed to create database " + DB);
