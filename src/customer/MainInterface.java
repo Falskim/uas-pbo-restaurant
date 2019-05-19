@@ -81,6 +81,16 @@ public class MainInterface extends javax.swing.JFrame {
         hide.setVisible(false);
         show.setVisible(true);
     }
+    private void updateStatusTable(ArrayList<Order> menu){
+        for(int i = 0 ; i < menu.size() ; i++){
+            // Nomor Baris
+            tabelPesanan.setValueAt(i+1, i, 0);
+            // Nama Menu
+            tabelPesanan.setValueAt(menu.get(i).getMenuName(), i, 1);
+            // Quantity Menu
+            tabelPesanan.setValueAt(menu.get(i).getQuantity(), i, 2);
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -139,7 +149,10 @@ public class MainInterface extends javax.swing.JFrame {
         lbStatusPesanan = new javax.swing.JLabel();
         btKembaliStatus = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tabelPesanan = new javax.swing.JTable();
         btCariNoTransaksi = new javax.swing.JButton();
+        lbStatusPencarian = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -171,7 +184,7 @@ public class MainInterface extends javax.swing.JFrame {
         HomeLayout.setHorizontalGroup(
             HomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, HomeLayout.createSequentialGroup()
-                .addContainerGap(122, Short.MAX_VALUE)
+                .addContainerGap(127, Short.MAX_VALUE)
                 .addGroup(HomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(HomeLayout.createSequentialGroup()
                         .addComponent(lbHome)
@@ -231,7 +244,7 @@ public class MainInterface extends javax.swing.JFrame {
         MenuMakananLayout.setHorizontalGroup(
             MenuMakananLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MenuMakananLayout.createSequentialGroup()
-                .addContainerGap(70, Short.MAX_VALUE)
+                .addContainerGap(77, Short.MAX_VALUE)
                 .addGroup(MenuMakananLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btMakanan1, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btMakanan2, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -283,7 +296,7 @@ public class MainInterface extends javax.swing.JFrame {
         MenuMinumanLayout.setHorizontalGroup(
             MenuMinumanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MenuMinumanLayout.createSequentialGroup()
-                .addContainerGap(70, Short.MAX_VALUE)
+                .addContainerGap(77, Short.MAX_VALUE)
                 .addGroup(MenuMinumanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btMinuman1, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btMinuman2, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -304,7 +317,7 @@ public class MainInterface extends javax.swing.JFrame {
 
         ScrollPanelMinuman.setViewportView(MenuMinuman);
 
-        TabMenu.addTab("Makanan", ScrollPanelMinuman);
+        TabMenu.addTab("Minuman", ScrollPanelMinuman);
 
         lbDaftarMenu.setFont(new java.awt.Font("Trebuchet MS", 0, 36)); // NOI18N
         lbDaftarMenu.setText("Daftar Menu");
@@ -377,7 +390,7 @@ public class MainInterface extends javax.swing.JFrame {
                         .addComponent(btLanjut, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(MenuLayout.createSequentialGroup()
                         .addGroup(MenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(TabMenu, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
+                            .addComponent(TabMenu, javax.swing.GroupLayout.DEFAULT_SIZE, 507, Short.MAX_VALUE)
                             .addGroup(MenuLayout.createSequentialGroup()
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(lbDaftarMenu)))
@@ -388,7 +401,7 @@ public class MainInterface extends javax.swing.JFrame {
                                     .addGroup(MenuLayout.createSequentialGroup()
                                         .addComponent(lbHargaProdukSatuan)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(tfHargaProdukSatuan, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE))
+                                        .addComponent(tfHargaProdukSatuan, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE))
                                     .addGroup(MenuLayout.createSequentialGroup()
                                         .addComponent(lbHargaProdukTotal)
                                         .addGap(21, 21, 21)
@@ -533,7 +546,7 @@ public class MainInterface extends javax.swing.JFrame {
                             .addGroup(TransaksiLayout.createSequentialGroup()
                                 .addGap(287, 287, 287)
                                 .addComponent(lbStatusPembayaran)))))
-                .addContainerGap(74, Short.MAX_VALUE))
+                .addContainerGap(79, Short.MAX_VALUE))
         );
         TransaksiLayout.setVerticalGroup(
             TransaksiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -584,15 +597,60 @@ public class MainInterface extends javax.swing.JFrame {
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jPanel1.setToolTipText("");
 
+        tabelPesanan.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "No", "Nama Menu", "Qty"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tabelPesanan);
+        if (tabelPesanan.getColumnModel().getColumnCount() > 0) {
+            tabelPesanan.getColumnModel().getColumn(0).setResizable(false);
+            tabelPesanan.getColumnModel().getColumn(0).setPreferredWidth(1);
+            tabelPesanan.getColumnModel().getColumn(1).setResizable(false);
+            tabelPesanan.getColumnModel().getColumn(1).setPreferredWidth(500);
+            tabelPesanan.getColumnModel().getColumn(2).setResizable(false);
+            tabelPesanan.getColumnModel().getColumn(2).setPreferredWidth(50);
+        }
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 750, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 717, Short.MAX_VALUE)
+                .addGap(27, 27, 27))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 252, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         btCariNoTransaksi.setText("Search");
@@ -601,6 +659,10 @@ public class MainInterface extends javax.swing.JFrame {
                 btCariNoTransaksiMouseClicked(evt);
             }
         });
+
+        lbStatusPencarian.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        lbStatusPencarian.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbStatusPencarian.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         javax.swing.GroupLayout StatusLayout = new javax.swing.GroupLayout(Status);
         Status.setLayout(StatusLayout);
@@ -620,18 +682,20 @@ public class MainInterface extends javax.swing.JFrame {
                     .addGroup(StatusLayout.createSequentialGroup()
                         .addGap(262, 262, 262)
                         .addComponent(btKembaliStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(23, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, StatusLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(StatusLayout.createSequentialGroup()
-                .addGap(332, 332, 332)
-                .addComponent(lbStatusPesanan)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(28, Short.MAX_VALUE))
             .addGroup(StatusLayout.createSequentialGroup()
                 .addGap(350, 350, 350)
                 .addComponent(btCariNoTransaksi)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(StatusLayout.createSequentialGroup()
+                .addGap(331, 331, 331)
+                .addComponent(lbStatusPesanan)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(StatusLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(StatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lbStatusPencarian, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         StatusLayout.setVerticalGroup(
@@ -645,24 +709,26 @@ public class MainInterface extends javax.swing.JFrame {
                     .addComponent(tfInputNoTransaksi, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btCariNoTransaksi)
-                .addGap(15, 15, 15)
+                .addGap(18, 18, 18)
+                .addComponent(lbStatusPencarian, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(11, 11, 11)
                 .addComponent(lbStatusPesanan)
-                .addGap(35, 35, 35)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btKembaliStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(23, 23, 23))
+                .addGap(24, 24, 24))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 809, Short.MAX_VALUE)
+            .addGap(0, 814, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(Home, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(Menu, javax.swing.GroupLayout.DEFAULT_SIZE, 809, Short.MAX_VALUE))
+                .addComponent(Menu, javax.swing.GroupLayout.DEFAULT_SIZE, 814, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
@@ -806,7 +872,13 @@ public class MainInterface extends javax.swing.JFrame {
 
     private void btCariNoTransaksiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btCariNoTransaksiMouseClicked
         int searchID = Integer.parseInt(tfInputNoTransaksi.getText());
-        db.searchOrder(searchID);
+        ArrayList<Order> daftarPesanan = db.searchOrder(searchID);
+        if (daftarPesanan.isEmpty()){
+            lbStatusPencarian.setText("No Transaksi " + searchID + " Tidak Ditemukan");
+            return;
+        }
+        lbStatusPencarian.setText("");
+        updateStatusTable(daftarPesanan);
     }//GEN-LAST:event_btCariNoTransaksiMouseClicked
 
     /**
@@ -875,6 +947,7 @@ public class MainInterface extends javax.swing.JFrame {
     private javax.swing.JButton btPesan;
     private javax.swing.JButton btTambahMenu;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbBanyakPorsi;
     private javax.swing.JLabel lbDaftarMenu;
     private javax.swing.JLabel lbHargaProdukSatuan;
@@ -886,12 +959,14 @@ public class MainInterface extends javax.swing.JFrame {
     private javax.swing.JLabel lbPembayaran;
     private javax.swing.JLabel lbPembayaran1;
     private javax.swing.JLabel lbStatusPembayaran;
+    private javax.swing.JLabel lbStatusPencarian;
     private javax.swing.JLabel lbStatusPesanan;
     private javax.swing.JLabel lbTotalBiaya;
     private javax.swing.JLabel lbTotalBiaya1;
     private javax.swing.JLabel lbTotalKembalian;
     private javax.swing.JLabel lbUangAnda;
     private javax.swing.JSpinner spPorsiProduk;
+    private javax.swing.JTable tabelPesanan;
     private javax.swing.JTextField tfHargaProdukSatuan;
     private javax.swing.JTextField tfHargaProdukTotal;
     private javax.swing.JTextField tfInputNoTransaksi;
