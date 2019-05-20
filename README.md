@@ -26,31 +26,25 @@ Percobaan penerapan konsep OOP dan implementasi JDBC antara Java dan Mysql
 3. Buka aplikasi XAMPP, lalu Aktifkan Mysql dan Apache
 4. Buka link localhost phpmyadmin pada browser, dengan cara (Pilih) :
     - Tekan button **Admin** pada sebelah kanan baris **MySQL**
-    - Buka browser, kemudian buka url :
-       ```
-       http://localhost/phpmyadmin/index.php
-       ```
+    - [Click Me !](http://localhost/phpmyadmin/index.php) 
 5. Pada phpmyadmin, klik tab **Database** lalu buatlah database baru dengan nama **restaurant**
-6. Pada phpmyadmin, klik tab **Import** lalu klik _Choose File_ dan pilih **restaurant.sql** yang berada pada subfolder project */sql/*
+6. Pada phpmyadmin, klik tab **Import** lalu click _Choose File_ dan pilih **restaurant.sql** yang berada pada subdirectory project */sql/*
    ```
    .../UAS-PBO/sql/
    ```
 7. Buka aplikasi Netbeans, lalu pilih dan jalankan **MainInterface.java**, dengan cara (Pilih) :
-    - Pada sidebar kiri, buka package **main** lalu klik kanan pada **MainInterface.java** dan pilih **Run File**
-    - Pada tab Run (diantara **Refactor** dan **Debug**), klik **Run Project**, dan pilih **MainInterface.java** sebagai class utama
+    - Pada sidebar kiri, buka package **main** lalu click kanan pada **MainInterface.java** dan pilih **Run File**
+    - Pada tab Run (diantara **Refactor** dan **Debug**), click **Run Project**, dan pilih **MainInterface.java** sebagai class utama
     
-___Anda dapat pula membuild project dengan cara menklik___ Clean and Build Project __pada tab__ Run __, sehingga jika anda ingin menjalankan aplikasi ini tidak perlu membuka Netbeans, namun cukup dengan menjalankan___ UAS-PBO.jar __yang berada pada direktori build berada, default :___
+_Anda dapat pula membuild project dengan cara mengclick_ __Clean and Build Project__ _pada tab_ __Run__ _, sehingga jika anda ingin menjalankan aplikasi ini tidak perlu membuka Netbeans, namun cukup dengan menjalankan_ __UAS-PBO.jar__ _yang berada pada direktori build berada, default :_
     ```
        .../UAS-PBO/dist/UAS-PBO.jar
     ```
     
 ## Keterangan Menggunakan Aplikasi
 - Jika anda memilih untuk mengetik jumlah porsi (tidak mengclick spinner), maka pastikan anda menekan **Enter** setelahnya
-- Jika anda lupa dengan id transaksi (untuk melakukan cek status), maka anda dapat membuka phpmyadmin table **orders** dan mencari daftar id yang tersedia
-    ```
-       http://localhost/phpmyadmin/sql.php?server=1&db=restaurant&table=orders&pos=0
-    ```
-
+- Jika anda lupa dengan id transaksi (untuk melakukan cek status), maka anda dapat membuka phpmyadmin table **orders** dan mencari daftar id yang tersedia ([Shortcut](http://localhost/phpmyadmin/sql.php?server=1&db=restaurant&table=orders&pos=0)) 
+       
 ## TL;DR
 Clone project ini, buat database baru bernama **restaurant**, import file **restaurant.sql** yang terdapat pada folder /sql/, lalu run **MainInterface.java** melalui netbeans
 
