@@ -18,42 +18,45 @@ public class MainInterface extends javax.swing.JFrame {
      * Creates new form Customer
      */
     
-    private final CRUD db = new CRUD();
-    private ArrayList<Menu> orders = new ArrayList<>();
-    private ArrayList<Menu> food;
-    private ArrayList<Menu> drink;
+    private final Database db = new Database();
+    private ArrayList<Menu> orders;
+    private ArrayList<Menu> menuFood;
+    private ArrayList<Menu> menuDrink;
     
     private Menu selectedMenu; //Current selected menu
     private long totalPrice;
-    private long userPayment;
     private int orderID;
     
     public MainInterface() {
         initComponents();
         createMenu();
-        
-        //Randomize orderID (antara 1 - 10000)
-        orderID = new Random().nextInt(10000) + 1;
+        resetState();
+    }
+    
+    private void randomizeOrderID(){
+        //Randomize orderID (antara 1 - 100000)
+        orderID = new Random().nextInt(100000) + 1;
         tfNoTransaksi.setText(Integer.toString(orderID));
     }
     
     private void createMenu(){
-        food = db.getMenuDetail("food");
-        drink = db.getMenuDetail("drink");        
+        menuFood = db.getMenuDetail("food");
+        menuDrink = db.getMenuDetail("drink");        
         //Change menu button text
-        btMakanan1.setText(food.get(0).getMenuName());
-        btMakanan2.setText(food.get(1).getMenuName());
-        btMakanan3.setText(food.get(2).getMenuName());
-        btMinuman1.setText(drink.get(0).getMenuName());
-        btMinuman2.setText(drink.get(1).getMenuName());
-        btMinuman3.setText(drink.get(2).getMenuName());
+        btMakanan1.setText(menuFood.get(0).getMenuName());
+        btMakanan2.setText(menuFood.get(1).getMenuName());
+        btMakanan3.setText(menuFood.get(2).getMenuName());
+        btMinuman1.setText(menuDrink.get(0).getMenuName());
+        btMinuman2.setText(menuDrink.get(1).getMenuName());
+        btMinuman3.setText(menuDrink.get(2).getMenuName());
     }
+    
     private void setMenuDetail(String type, int index){ 
         if(type.equals("food")){
-            selectedMenu = food.get(index);
+            selectedMenu = menuFood.get(index);
         }
         if(type.equals("drink")){
-            selectedMenu = drink.get(index);
+            selectedMenu = menuDrink.get(index);
         }
         lbNamaMenu.setText(selectedMenu.getMenuName());
         tfHargaProdukSatuan.setText("Rp. " + Integer.toString(selectedMenu.getPrice()));
@@ -63,16 +66,22 @@ public class MainInterface extends javax.swing.JFrame {
         //Debug
         System.out.println(selectedMenu.toString());
     }
+    
     private void addMenuOrder(String type){
         orders.add(selectedMenu);
+        
         // Updating totalPrice
-        tfTotalBiaya.setText(Long.toString(totalPrice));
-        tfTotalBiaya1.setText(Long.toString(totalPrice));
+        tfTotalBiaya.setText("Rp. " + Long.toString(totalPrice));
+        tfTotalBiayaTransaksi.setText("Rp. " + Long.toString(totalPrice));
     }
+    
+    // Menggati panel yang digantikan, dengan parameter (tampil, hilang)
     private void changePanel(javax.swing.JPanel show, javax.swing.JPanel hide){
         hide.setVisible(false);
         show.setVisible(true);
     }
+    
+    // Mengupdate tabel status dengan mengecek id pada database
     private void updateStatusTable(ArrayList<Order> menu){
         for(int i = 0 ; i < menu.size() ; i++){
             // Nomor Baris
@@ -82,6 +91,34 @@ public class MainInterface extends javax.swing.JFrame {
             // Quantity Menu
             tabelPesanan.setValueAt(menu.get(i).getQuantity(), i, 2);
         }
+    }
+    
+    private void resetMenuPanel(){
+        tfHargaProdukTotal.setText("-- Silahkan Pilih Menu --");
+        tfHargaProdukSatuan.setText("-- Silahkan Pilih Menu --");
+        spPorsiProduk.setValue(0);
+    }
+    
+    // Mereset kembali semua value dan text agar program dapat digunakan kembali
+    // Tanpa perlu di close
+    private void resetState(){
+        // General
+        orders = new ArrayList<>();
+        selectedMenu = null;
+        totalPrice = 0;
+        randomizeOrderID();
+        
+        // Panel MenuMakanan
+        resetMenuPanel();
+        tfTotalBiaya.setText("Rp. 0");
+        lbNamaMenu.setText("Menu");
+        
+        // Panel Transaksi
+        btBayar.setEnabled(true);
+        lbStatusPembayaran.setText("");
+        tfTotalKembalian.setText("Rp. 0");
+        tfInputUang.setText("Rp. 0");
+        tfTotalBiayaTransaksi.setText("Rp. 0");
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -126,7 +163,7 @@ public class MainInterface extends javax.swing.JFrame {
         lbNoTransaksi = new javax.swing.JLabel();
         tfNoTransaksi = new javax.swing.JTextField();
         lbTotalBiaya1 = new javax.swing.JLabel();
-        tfTotalBiaya1 = new javax.swing.JTextField();
+        tfTotalBiayaTransaksi = new javax.swing.JTextField();
         lbUangAnda = new javax.swing.JLabel();
         tfInputUang = new javax.swing.JTextField();
         lbTotalKembalian = new javax.swing.JLabel();
@@ -314,8 +351,9 @@ public class MainInterface extends javax.swing.JFrame {
         lbDaftarMenu.setFont(new java.awt.Font("Trebuchet MS", 0, 36)); // NOI18N
         lbDaftarMenu.setText("Daftar Menu");
 
-        lbNamaMenu.setFont(new java.awt.Font("Trebuchet MS", 0, 11)); // NOI18N
-        lbNamaMenu.setText("Produk");
+        lbNamaMenu.setFont(new java.awt.Font("Trebuchet MS", 0, 24)); // NOI18N
+        lbNamaMenu.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbNamaMenu.setText("Menu");
 
         lbHargaProdukSatuan.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
         lbHargaProdukSatuan.setText("Harga Satuan");
@@ -385,18 +423,22 @@ public class MainInterface extends javax.swing.JFrame {
                         .addComponent(btLanjut, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(MenuLayout.createSequentialGroup()
                         .addGroup(MenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(TabMenu, javax.swing.GroupLayout.DEFAULT_SIZE, 507, Short.MAX_VALUE)
+                            .addComponent(TabMenu, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
                             .addGroup(MenuLayout.createSequentialGroup()
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(lbDaftarMenu)))
                         .addGroup(MenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MenuLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btTambahMenu)
+                                .addGap(98, 98, 98))
                             .addGroup(MenuLayout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(MenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(MenuLayout.createSequentialGroup()
                                         .addComponent(lbHargaProdukSatuan)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(tfHargaProdukSatuan, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE))
+                                        .addComponent(tfHargaProdukSatuan))
                                     .addGroup(MenuLayout.createSequentialGroup()
                                         .addComponent(lbHargaProdukTotal)
                                         .addGap(21, 21, 21)
@@ -407,13 +449,9 @@ public class MainInterface extends javax.swing.JFrame {
                                         .addComponent(spPorsiProduk))
                                     .addComponent(tfTotalBiaya)
                                     .addComponent(lbTotalBiaya)
-                                    .addGroup(MenuLayout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(lbNamaMenu))))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MenuLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btTambahMenu)
-                                .addGap(98, 98, 98)))))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MenuLayout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(lbNamaMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
                 .addContainerGap())
         );
         MenuLayout.setVerticalGroup(
@@ -422,13 +460,14 @@ public class MainInterface extends javax.swing.JFrame {
                 .addContainerGap(41, Short.MAX_VALUE)
                 .addComponent(lbDaftarMenu)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(MenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(MenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(MenuLayout.createSequentialGroup()
                         .addComponent(TabMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 455, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MenuLayout.createSequentialGroup()
-                        .addComponent(lbNamaMenu)
-                        .addGap(85, 85, 85)
+                        .addGap(31, 31, 31)
+                        .addComponent(lbNamaMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(MenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lbHargaProdukSatuan)
                             .addComponent(tfHargaProdukSatuan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -466,9 +505,9 @@ public class MainInterface extends javax.swing.JFrame {
         lbTotalBiaya1.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
         lbTotalBiaya1.setText("Total Biaya Anda");
 
-        tfTotalBiaya1.setEditable(false);
-        tfTotalBiaya1.setText("Rp. 0");
-        tfTotalBiaya1.setFocusable(false);
+        tfTotalBiayaTransaksi.setEditable(false);
+        tfTotalBiayaTransaksi.setText("Rp. 0");
+        tfTotalBiayaTransaksi.setFocusable(false);
 
         lbUangAnda.setFont(new java.awt.Font("Trebuchet MS", 0, 14)); // NOI18N
         lbUangAnda.setText("Uang Anda");
@@ -518,14 +557,13 @@ public class MainInterface extends javax.swing.JFrame {
                                 .addGap(289, 289, 289)
                                 .addComponent(lbPembayaran))
                             .addGroup(TransaksiLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(TransaksiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(lbTotalBiaya1)
                                     .addComponent(lbUangAnda))
                                 .addGap(35, 35, 35)
                                 .addGroup(TransaksiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(tfInputUang, javax.swing.GroupLayout.PREFERRED_SIZE, 579, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(tfTotalBiaya1, javax.swing.GroupLayout.PREFERRED_SIZE, 579, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tfTotalBiayaTransaksi, javax.swing.GroupLayout.PREFERRED_SIZE, 579, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(tfNoTransaksi, javax.swing.GroupLayout.PREFERRED_SIZE, 579, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, TransaksiLayout.createSequentialGroup()
                         .addGroup(TransaksiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -558,7 +596,7 @@ public class MainInterface extends javax.swing.JFrame {
                     .addComponent(lbNoTransaksi))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(TransaksiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tfTotalBiaya1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfTotalBiayaTransaksi, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbTotalBiaya1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(TransaksiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -774,7 +812,12 @@ public class MainInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_btLanjutMousePressed
 
     private void btKembaliTransaksiMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btKembaliTransaksiMousePressed
-        changePanel(Menu, Transaksi);
+        if(btBayar.isEnabled()){
+            changePanel(Menu, Transaksi);
+            return;
+        }
+        changePanel(Home, Transaksi);
+        resetState();    
     }//GEN-LAST:event_btKembaliTransaksiMousePressed
 
     private void btKembaliStatusMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btKembaliStatusMousePressed
@@ -812,14 +855,13 @@ public class MainInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_spPorsiProdukStateChanged
 
     private void btTambahMenuMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btTambahMenuMousePressed
-        if(tfHargaProdukTotal.getText().equals("-- Silahkan Pilih Menu --")){
+        if  (tfHargaProdukTotal.getText().equals("-- Silahkan Pilih Menu --") || 
+            (int)spPorsiProduk.getValue() == 0){
             return;
         }
         System.out.println(Integer.parseInt(tfHargaProdukTotal.getText().substring(4)));
         totalPrice += Integer.parseInt(tfHargaProdukTotal.getText().substring(4));
-        tfHargaProdukTotal.setText("-- Silahkan Pilih Menu --");
-        tfHargaProdukSatuan.setText("-- Silahkan Pilih Menu --");
-        spPorsiProduk.setValue(0);
+        resetMenuPanel();
         addMenuOrder(selectedMenu.getType());    
     }//GEN-LAST:event_btTambahMenuMousePressed
 
@@ -836,15 +878,15 @@ public class MainInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_btMinuman3MouseClicked
 
     private void btBayarMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btBayarMousePressed
-        userPayment = Long.parseLong(tfInputUang.getText());
+        long userPayment = Long.parseLong(tfInputUang.getText());
         if (userPayment < totalPrice) {
             lbStatusPembayaran.setText("Pembayaran Gagal");
             return;
         }
-        btBayar.setEnabled(false);
         lbStatusPembayaran.setText("Pembayaran Berhasil");
-        long change = userPayment - totalPrice;
-        tfTotalKembalian.setText("Rp. " + change);
+        tfTotalKembalian.setText("Rp. " + (userPayment - totalPrice));
+        tfInputUang.setText("Rp. " + userPayment);
+        btBayar.setEnabled(false);
         
         // Menambah daftar pesanan baru ke DB
         // DB untuk tabel `orders`
@@ -853,7 +895,7 @@ public class MainInterface extends javax.swing.JFrame {
             return;
         }
         for(Menu order: orders){
-                db.createMenuOrder(order.getType(), orderID, order);
+            db.createMenuOrder(order.getType(), orderID, order);
         }
     }//GEN-LAST:event_btBayarMousePressed
 
@@ -972,7 +1014,7 @@ public class MainInterface extends javax.swing.JFrame {
     private javax.swing.JTextField tfInputUang;
     private javax.swing.JTextField tfNoTransaksi;
     private javax.swing.JTextField tfTotalBiaya;
-    private javax.swing.JTextField tfTotalBiaya1;
+    private javax.swing.JTextField tfTotalBiayaTransaksi;
     private javax.swing.JTextField tfTotalKembalian;
     // End of variables declaration//GEN-END:variables
 }

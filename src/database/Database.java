@@ -11,8 +11,8 @@ import java.util.*;
  *
  * @author Axioo
  */
-public class CRUD extends Connector{
-    public CRUD(){
+public class Database extends Connector{
+    public Database(){
         super();
     }
     
@@ -51,7 +51,7 @@ public class CRUD extends Connector{
     }
     
     // Menginput data pada table 'food_orders' atau 'drink_orders'
-    // Dalam list
+    // Sebagai bentuk list
     public void createMenuOrder(String menuType, int orderID, ArrayList<Menu> orders){
         String tableName = menuType.equals("food") ? "food_orders" : "drink_orders";
         for (Menu order : orders){
@@ -66,7 +66,7 @@ public class CRUD extends Connector{
             
         }
     }
-    // Dalam satuan
+    // Sebagai single instance
     public void createMenuOrder(String menuType, int orderID, Menu order){
         String tableName = menuType.equals("food") ? "food_orders" : "drink_orders";
         query = "INSERT INTO `" + tableName + "` "

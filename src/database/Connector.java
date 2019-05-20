@@ -36,24 +36,4 @@ public class Connector {
         }
     }
     
-    //Membuat database baru, apabila database belum ada sebelumnya.
-    //Jika sudah ada, maka proses pembuatan database pada method ini
-    //Akan dibatalkan
-    private void creatingDatabase(){
-        query = "USE " + DB;
-        try{
-            st.execute(query);
-            System.out.println("Database " + DB + " is ready");
-        }catch(SQLException e){
-            System.out.println("Database " + DB + " doesn't exist, creating now");
-            query = "CREATE DATABASE " + DB + " "
-                    + " USE " + DB;
-            try{
-                st.executeLargeUpdate(query);
-                System.out.println("Database " + DB + " created successfuly");
-            }catch(SQLException er){
-                System.err.println("Failed to create database " + DB);
-            }
-        }
-    }
 }
