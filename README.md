@@ -2,12 +2,12 @@
 Percobaan penerapan konsep OOP dan implementasi JDBC antara Java dan Mysql
 
 ## Yang dibutuhkan :
-- XAMPP (untuk mysql)
-- Netbeans (untuk membuka project ini)
+- XAMPP (untuk MySQL, Apache, phpmyadmin)
+- Netbeans (untuk membuka Project)
 
-## Langkah - langkah penggunaan :
+## Langkah - Langkah Menjalankan Aplikasi :
 1. Persiapkan aplikasi yang dibutuhkan
-2. Download/clone project ini dengan cara (silahkan dipilih)
+2. Download/clone source code project, dengan cara (Pilih) :
     - Menclone langsung melalui Netbeans
       
       [Tutorial](https://www.joe0.com/2018/02/16/how-to-cloning-github-project-into-netbeans/)
@@ -24,19 +24,35 @@ Percobaan penerapan konsep OOP dan implementasi JDBC antara Java dan Mysql
       3. Buka aplikasi Netbeans, lalu pilih **Open Project**
       4. Pilihlah folder dimana tempat ekstrak berada
 3. Buka aplikasi XAMPP, lalu Aktifkan Mysql dan Apache
-4. Buka link localhost phpmyadmin pada browser
-   ```
-   http://localhost/phpmyadmin/index.php
-   ```
-5. Pada phpmyadmin buatlah database baru dengan nama **restaurant**
-6. Pada tab import phpmyadmin, klik _Choose File_ dan pilih **restaurant.sql** pada folder project /sql/
+4. Buka link localhost phpmyadmin pada browser, dengan cara (Pilih) :
+    - Tekan button **Admin** pada sebelah kanan baris **MySQL**
+    - Buka browser, kemudian buka url :
+       ```
+       http://localhost/phpmyadmin/index.php
+       ```
+5. Pada phpmyadmin, klik tab **Database** lalu buatlah database baru dengan nama **restaurant**
+6. Pada phpmyadmin, klik tab **Import** lalu klik _Choose File_ dan pilih **restaurant.sql** yang berada pada subfolder project */sql/*
    ```
    .../UAS-PBO/sql/
    ```
-7. Pilih dan jalankan **MainInterface.java**
+7. Buka aplikasi Netbeans, lalu pilih dan jalankan **MainInterface.java**, dengan cara (Pilih) :
+    - Pada sidebar kiri, buka package **main** lalu klik kanan pada **MainInterface.java** dan pilih **Run File**
+    - Pada tab Run (diantara **Refactor** dan **Debug**), klik **Run Project**, dan pilih **MainInterface.java** sebagai class utama
+    
+___Anda dapat pula membuild project dengan cara menklik___ Clean and Build Project __pada tab__ Run __, sehingga jika anda ingin menjalankan aplikasi ini tidak perlu membuka Netbeans, namun cukup dengan menjalankan___ UAS-PBO.jar __yang berada pada direktori build berada, default :___
+    ```
+       .../UAS-PBO/dist/UAS-PBO.jar
+    ```
+    
+## Keterangan Menggunakan Aplikasi
+- Jika anda memilih untuk mengetik jumlah porsi (tidak mengclick spinner), maka pastikan anda menekan **Enter** setelahnya
+- Jika anda lupa dengan id transaksi (untuk melakukan cek status), maka anda dapat membuka phpmyadmin table **orders** dan mencari daftar id yang tersedia
+    ```
+       http://localhost/phpmyadmin/sql.php?server=1&db=restaurant&table=orders&pos=0
+    ```
 
 ## TL;DR
 Clone project ini, buat database baru bernama **restaurant**, import file **restaurant.sql** yang terdapat pada folder /sql/, lalu run **MainInterface.java** melalui netbeans
 
 
-Dibuat pada aplikasi Netbeans versi 8.2
+_Aplikasi ini diibuat pada Netbeans versi 8.2_
