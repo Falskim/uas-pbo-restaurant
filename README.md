@@ -1,6 +1,11 @@
 # UAS PBO Restaurant
 Percobaan penerapan konsep OOP dan implementasi JDBC antara Java dan Mysql
 
+### PBO A - Kelompok 2:
+- Fawwaz Syiham Muyassar        (1177050044)
+- Seno Tresna Galang Pradana    (11770500106) 
+- Fahmi Fauzi kadarmanto        (177050127)  
+
 ## Yang dibutuhkan :
 - XAMPP (untuk MySQL, Apache, phpmyadmin)
 - Netbeans (untuk membuka Project)
@@ -44,7 +49,8 @@ _Anda dapat pula membuild project dengan cara mengclick_ __Clean and Build Proje
 ## Keterangan Menggunakan Aplikasi
 - Jika anda memilih untuk mengetik jumlah porsi (tidak mengclick spinner), maka pastikan anda menekan **Enter** setelahnya
 - Jika anda lupa dengan id transaksi (untuk melakukan cek status), maka anda dapat membuka phpmyadmin table **orders** dan mencari daftar id yang tersedia ([Shortcut](http://localhost/phpmyadmin/sql.php?server=1&db=restaurant&table=orders&pos=0)) 
-       
+- Lebih detailnya dapat dilihat pada [User Manual](https://github.com/Falskim/uas-pbo-restaurant/blob/master/USER%20MANUAL.pdf)    
+
 ## TL;DR
 Clone project ini, buat database baru bernama **restaurant**, import file **restaurant.sql** yang terdapat pada folder /sql/, lalu run **MainInterface.java** melalui netbeans
 
